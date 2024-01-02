@@ -1,8 +1,6 @@
 package com.edu.ms_product.exceptions;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -11,6 +9,6 @@ import java.util.Date;
 @Setter
 public class ExceptionResponse {
     private Date timestamp;
-    private String message;
+    private Object message;
     private String description;
 }

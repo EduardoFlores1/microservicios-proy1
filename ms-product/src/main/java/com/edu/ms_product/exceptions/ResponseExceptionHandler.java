@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
@@ -33,7 +34,10 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler {
     // validations
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        ExceptionResponse response = new ExceptionResponse(new Date(), Arrays.toString(ex.getDetailMessageArguments()), request.getDescription(false));
+        Map<String, Object> errs = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error -> errs.put(error.getField(), error.getDefaultMessage()));
+        ExceptionResponse response = new ExceptionResponse(new Date(), errs, request.getDescription(false));
+
         return ResponseEntity.badRequest().body(response);
     }
 }
